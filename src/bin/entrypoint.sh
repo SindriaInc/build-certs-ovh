@@ -16,9 +16,14 @@ if [ "${IAC_MODE}" == "standalone" ]; then
    echo -e "${BLUE}Init certbot cache...${NC}"
    mkdir -p /etc/letsencrypt
 
+   # Ovh ini
+   echo -e "${BLUE}Setting ovh ini...${NC}"
+   (umask 077; echo ${OVH_CONF} | base64 -d > ovh.ini)
+   chmod 600 ovh.ini
+
    # Renew existing cert or build
    echo -e "${BLUE}Building certs...${NC}"
-   certbot renew -n --agree-tos --dns-route53 --dns-route53-propagation-seconds 60 --cert-name ${IAC_CERTBOT_DOMAIN} -m ${IAC_CERTBOT_EMAIL} || certbot certonly -n --agree-tos --dns-route53 --dns-route53-propagation-seconds 60 -d ${IAC_CERTBOT_DOMAIN} -d *.${IAC_CERTBOT_DOMAIN} -m ${IAC_CERTBOT_EMAIL}
+   certbot renew -n --agree-tos --dns-ovh --dns-ovh-credentials ovh.ini --dns-ovh-propagation-seconds 60 --cert-name ${IAC_CERTBOT_DOMAIN} -m ${IAC_CERTBOT_EMAIL} || certbot certonly -n --agree-tos --dns-ovh --dns-ovh-credentials ovh.ini --dns-ovh-propagation-seconds 60 -d ${IAC_CERTBOT_DOMAIN} -d *.${IAC_CERTBOT_DOMAIN} -m ${IAC_CERTBOT_EMAIL}
 
 else
 
@@ -35,12 +40,16 @@ else
   ln -s /etc/letsencrypt/archive/${IAC_CERTBOT_DOMAIN}/fullchain*.pem /etc/letsencrypt/live/${IAC_CERTBOT_DOMAIN}/fullchain.pem || true
   ln -s /etc/letsencrypt/archive/${IAC_CERTBOT_DOMAIN}/privkey*.pem /etc/letsencrypt/live/${IAC_CERTBOT_DOMAIN}/privkey.pem || true
 
+  # Ovh ini
+  echo -e "${BLUE}Setting ovh ini...${NC}"
+  (umask 077; echo ${OVH_CONF} | base64 -d > ovh.ini)
+  chmod 600 ovh.ini
+
   # Renew existing cert or build
   echo -e "${BLUE}Building certs...${NC}"
-  certbot renew -n --agree-tos --dns-route53 --dns-route53-propagation-seconds 60 --cert-name ${IAC_CERTBOT_DOMAIN} -m ${IAC_CERTBOT_EMAIL} || certbot certonly -n --agree-tos --dns-route53 --dns-route53-propagation-seconds 60 -d ${IAC_CERTBOT_DOMAIN} -d *.${IAC_CERTBOT_DOMAIN} -m ${IAC_CERTBOT_EMAIL}
+  certbot renew -n --agree-tos --dns-ovh --dns-ovh-credentials ovh.ini --dns-ovh-propagation-seconds 60 --cert-name ${IAC_CERTBOT_DOMAIN} -m ${IAC_CERTBOT_EMAIL} || certbot certonly -n --agree-tos --dns-ovh --dns-ovh-credentials ovh.ini --dns-ovh-propagation-seconds 60 -d ${IAC_CERTBOT_DOMAIN} -d *.${IAC_CERTBOT_DOMAIN} -m ${IAC_CERTBOT_EMAIL}
 
   # Update certbot cache
   echo -e "${BLUE}Updating certbot cache...${NC}"
   aws s3 sync /etc/letsencrypt s3://${IAC_CERTBOT_CACHE}
 fi
-

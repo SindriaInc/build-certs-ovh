@@ -1,11 +1,11 @@
-FROM certbot/dns-route53:latest
+FROM certbot/dns-ovh:latest
 
 ARG TAG_VERSION
 ARG TIMEZONE
 
 LABEL \
-	name="build-certs-route53" \
-	image="sindriainc/build-certs-route53" \
+	name="build-certs-ovh" \
+	image="sindriainc/build-certs-ovh" \
 	tag="${TAG_VERSION}" \
 	vendor="sindria"
 

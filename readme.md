@@ -14,6 +14,7 @@ List of required envs. This envs will be set on your pipeline variables or in yo
 | AWS_ACCESS_KEY_ID         | <access-key>                  |
 | AWS_SECRET_ACCESS_KEY     | <secret-key>                  |
 | AWS_DEFAULT_REGION        | eu-central-1                  |
+| OVH_CONF                  | base64 ovh ini secrets        |
 | IAC_MODE                  | standalone or void            |
 | IAC_CERTBOT_CACHE         | example-certbot-cache         |
 | IAC_CERTBOT_EMAIL         | devops@example.com            |
@@ -24,7 +25,7 @@ List of required envs. This envs will be set on your pipeline variables or in yo
 
 Paste this command in your pipeline step:
 
-`docker run --rm -t --env IAC_MODE=${IAC_MODE} --env AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --env AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} --env AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} --env IAC_CERTBOT_CACHE=${IAC_CERTBOT_CACHE} --env IAC_CERTBOT_EMAIL=${IAC_CERTBOT_EMAIL} --env IAC_CERTBOT_DOMAIN=${IAC_CERTBOT_DOMAIN} sindriainc/build-certs-route53:1.0.0`
+`docker run --rm -t --env IAC_MODE=${IAC_MODE} --env AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --env AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} --env AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} --env OVH_CONF=${OVH_CONF} --env IAC_CERTBOT_CACHE=${IAC_CERTBOT_CACHE} --env IAC_CERTBOT_EMAIL=${IAC_CERTBOT_EMAIL} --env IAC_CERTBOT_DOMAIN=${IAC_CERTBOT_DOMAIN} sindriainc/build-certs-ovh:1.0.0`
 
 OR use the helper script:
 
